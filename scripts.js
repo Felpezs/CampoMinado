@@ -217,11 +217,38 @@ function trocarTela(){
   }
 }
 
-function realizarLogin () {
+function validarLogin(ev){
+  let ajax = ev.target;
+  if (ajax.readyState === XMLHttpRequest.DONE) {
+      alert(ajax.responseText + "\nCódigo: " + ajax.status);
+    } else {
+    // Ainda não terminou.
+    }
+}
 
+function realizarLogin () {
   let usuario = document.getElementById("usuarioLogin").value;
   let senha = document.getElementById("senhaLogin").value;
 
+  let json = JSON.stringify({Username: usuario, Password: senha});
+  let ajax = new XMLHttpRequest();
+
+  //Qual requisicao sera feita e para onde
+  ajax.open("POST", "php/login.php");
+  
+  //metodo chamado quando a requisicao for concluida
+  ajax.addEventListener('readystatechange', validarLogin);
+
+  //tipo de header que sera enviado na requisicao
+  ajax.setRequestHeader('Content-Type', 'application/json');
+
+  //tipo da resposta da requisicao
+  //ajax.responseType = "json";
+  
+  //envio de requisicao
+  ajax.send(json);
+
+  /*
   try {
 
   if (usuario == JSON.parse(localStorage.getItem('usuario')).username  &&
@@ -234,9 +261,10 @@ function realizarLogin () {
     } catch (err) {
       alert ("Nome de usuário ou senha incorreto(s)!")
     //alert ("Nenhum usuário encontrado no sistema. Cadastre-se")
-  }
+  }*/
 
 }
+
 
 //Torna as funções visíveis para o HTML, para que possam ser chamados no onclick=""..."
 //window.trocarTela = trocarTela;

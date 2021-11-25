@@ -6,7 +6,7 @@ const operacoesNum = [
 [1, -1],  [1, 0],  [1, 1],
 ];
 
-var board = [], tabuleiro, fim = 0, campoMinado, tTrapaca, iniciou=0, numeroDeBombas=5, dimensoes='5x5', tempoAtual=0, timerLigado = true, modo="classico" ; //fim define o fim do jogo
+var board = [], tabuleiro, fim = 0, campoMinado, tTrapaca, iniciou=0, numeroDeBombas=20, dimensoes='10x10', tempoAtual=0, timerLigado = true, modo="classico" ; //fim define o fim do jogo
 
   var dimensao1 = parseInt(dimensoes.split("x")[0])
   var dimensao2 = parseInt(dimensoes.split("x")[1])
@@ -15,18 +15,24 @@ class CampoMinado {
     constructor(linhas, colunas, minas) {
         this.linhas = linhas;
         this.colunas = colunas;
-        this.minas =minas;
+        this.minas = minas;
         this.posicoes = [];
 
         this.inicio();
     }
 
     inicio() {
+     
       this.criarTabuleiro();
+    
       this.sortearMinas();
+    
       this.inserirMinas();
+  
       this.attNum();
+    
       this.gerarTabela(this.linhas,this.colunas);
+  
       this.gerarTrapaca(this.linhas,this.colunas);
     }
 
@@ -49,20 +55,28 @@ class CampoMinado {
 
     }
 
+
+
     sortearMinas() {
       this.posicoes = [];
+      let i = 0
 
-      while (this.posicoes.length < this.minas) {
+
+      while (this.posicoes.length < this.minas ) {
+          i++
+         
           const y = this.getRandomInt(0, this.linhas);
           const x = this.getRandomInt(0, this.colunas);
 
           if (!this.jaExiste([y, x])) {
               this.posicoes.push([y, x]);
           }
+
       }
     }
 
-    getRandomInt(min, max) {
+
+    getRandomInt(min, max) {        
         return Math.floor(Math.random() * (max - min)) + min;
     }
 
@@ -172,6 +186,7 @@ function startGame(
 
 
   campoMinado = new CampoMinado(dimensao1,dimensao2,numeroDeBombas);//linhas, colunas, bombas :)
+  
   tabuleiro.addEventListener('click',campoMinado.verificar);
   tabela.oncontextmenu = campoMinado.bandeira;
   trackTime();
@@ -189,12 +204,12 @@ function verificaNumeroDeBombasEDimensoes () {
     dimensao2 = 20;
   }
 
-  if (dimensao1*dimensao2 > numeroDeBombas) {
+  if (parseInt(dimensao1*dimensao2*0.9) > numeroDeBombas) {
     return 0;
   } else {
     
-    document.getElementById("nbombas").value = dimensao1 * dimensao2 - 1;
-    numeroDeBombas = dimensao1 * dimensao2 - 1;
+    document.getElementById("nbombas").value = parseInt(dimensao1*dimensao2*0.9);
+    numeroDeBombas = parseInt(dimensao1*dimensao2*0.9);
     return -1;
   }
 }
@@ -350,10 +365,10 @@ input0.addEventListener('input', function()
       numeroDeBombas =  parseInt(input0.value);
     }
     verificaNumeroDeBombasEDimensoes()
-    if (dimensao1*dimensao2 < parseInt(input0.value)) {
+    if (parseInt(dimensao1*dimensao2*0.9) < parseInt(input0.value)) {
      
-      input0.value = dimensao1 * dimensao2 - 1
-      numeroDeBombas = dimensao1 * dimensao2 - 1
+      input0.value = parseInt(dimensao1 * dimensao2*0.9)
+      numeroDeBombas = parseInt(dimensao1 * dimensao2*0.9)
     } else {
       
       numeroDeBombas =  parseInt(input0.value);
@@ -383,7 +398,6 @@ input1.addEventListener('input', function()
   } else {
     dimensao1 = parseInt(input1.value);
   }
-
 });
 
 
@@ -409,4 +423,4 @@ input2.addEventListener('input', function()
 
 });
 
-
+//Código adaptado de: https://dev.to/manussakis/como-criar-um-tabuleiro-de-campo-minado-em-javascript-26gf

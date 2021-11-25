@@ -2,6 +2,9 @@
 
 //Area de partidas
 
+
+
+
 var partidas = [
   {
     "id": "1",

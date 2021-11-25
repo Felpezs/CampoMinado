@@ -22,6 +22,8 @@ function cpfIsValid(strCPF) {
     return true;
 }
 
+vvvvvvv
+
 function dataValida(strData){
 
     //Verifica se a data esta no padrão
