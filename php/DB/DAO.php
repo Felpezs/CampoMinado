@@ -17,6 +17,7 @@ abstract class DAO{
                 $pwd = self::$pwd;
 
                 self::$conn = new PDO("mysql:host=$serverName; dbname=$dbname", $userName, $pwd);
+                self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }
             catch(PDOException $e){
                 die("Connection Failed: {$e->getMessage()}");
@@ -34,6 +35,7 @@ abstract class DAO{
         }
         return $rs;
     }
+    
     protected function lastId($table, $primaryKey){
         $lastId = -1;
         try{
