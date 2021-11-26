@@ -1,10 +1,11 @@
 <?php
-include("DAO.php");
+require_once("DAO.php");
+require_once("../Objects/User.php");
 
 class UserDAO extends DAO{
     private static $instance;
 
-    function __construct(){
+    public function __construct(){
         DAO::getConnection();
         DAO::createTable();
     }
@@ -13,121 +14,62 @@ class UserDAO extends DAO{
         return isset(self::$instance) ? self::$instance : self::$instance = new UserDAO();
     }
 
-    public function create($nome, $cpf, $dtNasc, $tel, $email, $username, $password){
+    public function insertNewUser($nome, $cpf, $dtNasc, $tel, $email, $username, $password){
         try{
-            $stmt = DAO::getConnection()->prepare("INSERT INTO User VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt = DAO::getConnection()->prepare("INSERT INTO User (Nome, Cpf, Data_nascimento, Telefone, Email, Username, Password) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute(array($nome, $cpf, $dtNasc, $tel, $email, $username, $password));
         }
         catch(PDOException $e){
             die("Insert Into Table User Failed: {$e->getMessage()}");
         }
-        //return self::retrieveById(DAO::lastId("User", "Id_user"))
+        return $this->retrieveById(DAO::lastId("User", "Id_user"));
     }
 
-    public function buildObject($rs){
+    private function buildObject($rs){
         $user = null;
         try{
-            //$user = new User($rs["User_id"]);
+            $user = new User($rs["Id_user"], $rs["Nome"], $rs["Cpf"], $rs["Data_nascimento"], $rs["Telefone"], $rs["Email"], $rs["Username"], $rs["Password"]);
         }
         catch(PDOException $e){
             die("Build Object Failed: {$e->getMessage()}");
         }
+        return $user;
     }
 
-    public function retrieve($query){
-        $arr = array();
+    private function retrieveByQuery($query){
+        $users = array();
         try{
             $rs = DAO::getResultSet($query);
-
-            while($rs->fetch(PDO::FETCH_ASSOC)){
-                //$arr->array_push(self::buildObject($rs->fetch(PDO::FETCH_ASSOC)));
+            while($row = $rs->fetch(PDO::FETCH_ASSOC)){
+                array_push($users, $this->buildObject($row));
             }
         }
         catch(PDOException $e){
             die("Retrieve From Table User Failed: {$e->getMessage()}");
         }
+        return $users;
     }
 
-}
+    public function retrieveById($id){
+        $query = "SELECT * FROM User WHERE Id_user = $id";
+        $user = $this->retrieveByQuery($query);
+        return (is_null($user) ? null : $user[0]);
+    }
 
-/*
-package Model;
+    public function retrieveByUsername($username){
+        $query = "SELECT * FROM User WHERE Username = $username";
+        $user = $this->retrieveByQuery($query);
+        return (is_null($user) ? null : $user[0]);
+    }
 
-public List retrieve(String query) {
-    List<Exame> exames = new ArrayList();
-    ResultSet rs = getResultSet(query);
-    try {
-        while (rs.next()) {
-            exames.add(buildObject(rs));
+    public function updateUser($User){
+        try{
+            $stmt = DAO::getConnection()->prepare("UPDATE User SET Nome=?, Cpf=?, Data_nascimento=?, Telefone=?, Email=?, Username=?, Password=?");
+            $stmt->execute(array($User->getNome(), $User->getCpf(), $User->getDtNasc(), $User->getTelefone(), $User->getEmail(), $User->getUsername(), $User->getPassword()));
         }
-    } catch (SQLException e) {
-        System.err.println("Exception: " + e.getMessage());
-    }
-    return exames;
-}
-
-    private Exame buildObject(ResultSet rs) {
-        Exame exame = null;
-        try {
-            exame = new Exame(rs.getInt("id"), rs.getString("nome"), rs.getInt("id_consulta"));
-        } catch (SQLException e) {
-            System.err.println("Exception: " + e.getMessage());
-        }
-        return exame;
-    }
-
-    // Generic Retriever
-    
-    // RetrieveAll
-    public List retrieveAll() {
-        return this.retrieve("SELECT * FROM exame");
-    }
-    
-    // RetrieveLast
-    public List retrieveLast(){
-        return this.retrieve("SELECT * FROM exame WHERE id = " + lastId("exame","id"));
-    }
-
-    // RetrieveById
-    public Exame retrieveById(int id) {
-        List<Exame> exames = this.retrieve("SELECT * FROM exame WHERE id = " + id);
-        return (exames.isEmpty()?null:exames.get(0));
-    }
-
-    // RetrieveBySimilarName
-    public List retrieveBySimilarName(String nome) {
-        return this.retrieve("SELECT * FROM exame WHERE nome LIKE '%" + nome + "%'");
-    }    
-    
-    public List retrieveByIdConsulta(int id){
-        return this.retrieve("SELECT * FROM exame WHERE id_consulta = " + id);
-    }
-    
-    // Update
-    public void update(Exame exame) {
-        try {
-            PreparedStatement stmt;
-            stmt = DAO.getConnection().prepareStatement("UPDATE exame SET nome=?, id_consulta=? WHERE id=?");
-            stmt.setString(1, exame.getNome());
-            stmt.setInt(2, exame.getIdConsulta());
-            stmt.setInt(3, exame.getId());
-            executeUpdate(stmt);
-        } catch (SQLException e) {
-            System.err.println("Exception: " + e.getMessage());
-        }
-    }
-    // Delete   
-    public void delete(int id) {
-        PreparedStatement stmt;
-        try {
-            stmt = DAO.getConnection().prepareStatement("DELETE FROM exame WHERE id = ?");
-            stmt.setInt(1, id);
-            executeUpdate(stmt);
-        } catch (SQLException e) {
-            System.err.println("Exception: " + e.getMessage());
+        catch(PDOException $e){
+            die("Update On Table User Failed: {$e->getMessage()}");
         }
     }
 }
-
-    */
 ?>

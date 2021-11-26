@@ -8,13 +8,15 @@ abstract class DAO{
 
     private static $conn;
 
-    public static function getConnection(){
+    protected static function getConnection(){
         if(self::$conn == null){
             try{
                 $serverName = self::$serverName;
                 $userName = self::$userName;
                 $dbname = self::$dbname;
                 $pwd = self::$pwd;
+
+                self::createDB($serverName, $userName, $pwd, $dbname);
 
                 self::$conn = new PDO("mysql:host=$serverName; dbname=$dbname", $userName, $pwd);
                 self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -24,6 +26,16 @@ abstract class DAO{
             }
         }
         return self::$conn;    
+    }
+
+    private static function createDB($serverName, $userName, $pwd, $dbname){
+        $conn = new mysqli($serverName, $userName, $pwd);
+
+        $sql = "CREATE DATABASE IF NOT EXISTS $dbname";
+        $result = $conn->query($sql);
+
+        if($result == false)
+            throw new Exception("Create Database Failed");
     }
 
     protected function getResultSet($query){
@@ -39,13 +51,13 @@ abstract class DAO{
     protected function lastId($table, $primaryKey){
         $lastId = -1;
         try{
-            $rs = self::getConnection()->query("SELECT MAX ($primaryKey) AS id FROM $table");
-            $lastId = $rs[0]; 
+            $rs = self::getConnection()->query("SELECT MAX($primaryKey) AS $primaryKey FROM $table");
+            $lastId = $rs->fetch(PDO::FETCH_ASSOC); 
         }
         catch(PDOException $e){
             die("Connection Failed: {$e->getMessage()}");
         }
-        return $lastId;
+        return $lastId[$primaryKey];
     }
 
     protected function executeUpdate($query){
