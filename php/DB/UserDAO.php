@@ -5,7 +5,7 @@ require_once("../Objects/User.php");
 class UserDAO extends DAO{
     private static $instance;
 
-    public function __construct(){
+    private function __construct(){
         DAO::getConnection();
         DAO::createTable();
     }
