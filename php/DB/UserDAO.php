@@ -57,9 +57,9 @@ class UserDAO extends DAO{
     }
 
     public function retrieveByUsername($username){
-        $query = "SELECT * FROM User WHERE Username = $username";
+        $query = "SELECT * FROM User WHERE Username LIKE '" . $username . "'";
         $user = $this->retrieveByQuery($query);
-        return (is_null($user) ? null : $user[0]);
+        return (empty($user) ? null : $user[0]);
     }
 
     public function updateUser($User){

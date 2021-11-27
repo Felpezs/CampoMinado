@@ -14,7 +14,6 @@
         return $result;
     }
 
-    echo gerarChave();
 
 function criarSessao ($username) {
 
@@ -22,9 +21,9 @@ function criarSessao ($username) {
 
     session_id($username);
     session_start();
-    echo session_id();
+    //echo session_id();
     $_SESSION["chave"] = $chave;
-    echo "<pre>", print_r($_SESSION, 1), "</pre>";
+    //echo "<pre>", print_r($_SESSION, 1), "</pre>";
     session_write_close();
 
     return $chave;
