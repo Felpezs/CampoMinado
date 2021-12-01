@@ -84,22 +84,6 @@ function criarConta() {
     }
   }
   
-  function efetuarLogin(ev) {
-    let ajax = ev.target;
-    if (ajax.readyState === XMLHttpRequest.DONE) {
-  
-      var responseData = JSON.parse(ajax.responseText);
-  
-      if (ajax.status === 201){
-        criaCookieDeSessao("usuario", responseData.usuario, responseData.expDateMs);
-        criaCookieDeSessao("chave", responseData.chave, responseData.expDateMs);
-        requisitarPessoa(responseData.chave, responseData.usuario);
-        
-      }
-      else
-        alert(responseData.message);
-    }
-  }
 
   function logar() {
     let usuario = document.getElementById("usuarioLogin").value;
@@ -112,7 +96,24 @@ function criarConta() {
     ajax.open("POST", "php/Auth/login.php");
   
     //metodo chamado quando a requisicao for concluida
-    ajax.addEventListener('readystatechange', efetuarLogin);
+    ajax.addEventListener('readystatechange', (ev) => {
+
+        let ajax = ev.target;
+        if (ajax.readyState === XMLHttpRequest.DONE) {
+      
+          var responseData = JSON.parse(ajax.responseText);
+      
+          if (ajax.status === 201){
+            criaCookieDeSessao("usuario", responseData.usuario, responseData.expDateMs);
+            criaCookieDeSessao("chave", responseData.chave, responseData.expDateMs);
+            requisitarPessoa(responseData.chave, responseData.usuario);
+            
+          }
+          else
+            alert(responseData.message);
+        }
+
+    });
   
     //tipo de header que sera enviado na requisicao
     ajax.setRequestHeader('Content-Type', 'application/json');
