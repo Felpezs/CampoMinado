@@ -53,7 +53,7 @@ class UserDAO extends DAO{
     public function retrieveById($id){
         $query = "SELECT * FROM User WHERE Id_user = $id";
         $user = $this->retrieveByQuery($query);
-        return (is_null($user) ? null : $user[0]);
+        return (empty($user) ? null : $user[0]);
     }
 
     public function retrieveByUsername($username){

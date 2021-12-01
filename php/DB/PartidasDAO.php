@@ -53,14 +53,14 @@ class PartidaDAO extends DAO{
     public function retrieveByIdUser($idUser){
         $query = "SELECT * FROM Partidas WHERE Id_user = $idUser";
         $partidas = $this->retrieveByQuery($query);
-        return (is_null($partidas) ? null : $partidas);
+        return (empty($partidas) ? null : $partidas);
     }
 
 
     public function retrieveById($idPartida){
         $query = "SELECT * FROM Partidas WHERE Id_partida = $idPartida";
         $partida = $this->retrieveByQuery($query);
-        return (is_null($partida) ? null : $partida[0]);
+        return (empty($partida) ? null : $partida[0]);
     }
 
     public function updatePartida($Partida){

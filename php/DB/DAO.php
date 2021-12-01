@@ -70,9 +70,9 @@ abstract class DAO{
             $query = "CREATE TABLE IF NOT EXISTS User(
                 Id_user INT NOT NULL AUTO_INCREMENT,
                 Nome VARCHAR(120) NOT NULL,
-                Cpf INT NOT NULL,
+                Cpf CHAR(11) NOT NULL,
                 Data_nascimento VARCHAR(10) NOT NULL,
-                Telefone INT NOT NULL,
+                Telefone CHAR(15) NOT NULL,
                 Email VARCHAR(70) NOT NULL,
                 Username VARCHAR(120) NOT NULL,
                 Password VARCHAR(120) NOT NULL,
