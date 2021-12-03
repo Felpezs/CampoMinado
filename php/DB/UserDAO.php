@@ -20,7 +20,15 @@ class UserDAO extends DAO{
             $stmt->execute(array($nome, $cpf, $dtNasc, $tel, $email, $username, $password));
         }
         catch(PDOException $e){
-            die("Insert Into Table User Failed: {$e->getMessage()}");
+            $errorMessage = $e->getMessage();
+            if(strpos(strtolower($errorMessage),"cpf")){
+                throw new Exception("O CPF solicitado já foi cadastrado no sistema.");
+            }
+            else if(strpos(strtolower($errorMessage), "username")){
+                throw new Exception("O Username solicitado já foi cadastrado no sistema.");
+            }
+            else
+                die("Inser into Table User failed: {$e->getMessage()}");
         }
         return $this->retrieveById(DAO::lastId("User", "Id_user"));
     }
@@ -31,7 +39,7 @@ class UserDAO extends DAO{
             $user = new User($rs["Id_user"], $rs["Nome"], $rs["Cpf"], $rs["Data_nascimento"], $rs["Telefone"], $rs["Email"], $rs["Username"], $rs["Password"]);
         }
         catch(PDOException $e){
-            die("Build Object Failed: {$e->getMessage()}");
+            throw "Build Object Failed: {$e->getMessage()}";
         }
         return $user;
     }
@@ -45,7 +53,7 @@ class UserDAO extends DAO{
             }
         }
         catch(PDOException $e){
-            die("Retrieve From Table User Failed: {$e->getMessage()}");
+            throw new Exception("Retrieve From Table User Failed: {$e->getMessage()}");
         }
         return $users;
     }
@@ -64,11 +72,11 @@ class UserDAO extends DAO{
 
     public function updateUser($User){
         try{
-            $stmt = DAO::getConnection()->prepare("UPDATE User SET Nome=?, Cpf=?, Data_nascimento=?, Telefone=?, Email=?, Username=?, Password=?");
-            $stmt->execute(array($User->getNome(), $User->getCpf(), $User->getDtNasc(), $User->getTelefone(), $User->getEmail(), $User->getUsername(), $User->getPassword()));
+            $stmt = DAO::getConnection()->prepare("UPDATE User SET Nome=?, Data_nascimento=?, Telefone=?, Email=?, Password=?");
+            $stmt->execute(array($User->getNome(), $User->getDtNasc(), $User->getTelefone(), $User->getEmail(), $User->getPassword()));
         }
         catch(PDOException $e){
-            die("Update On Table User Failed: {$e->getMessage()}");
+            throw "Update On Table User Failed: {$e->getMessage()}";
         }
     }
 }

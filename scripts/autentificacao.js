@@ -1,6 +1,6 @@
 "use strict";
-import {requisitarPessoa} from './scripts/pessoa.js';
-import { criaCookieDeSessao } from './scripts/session.js';
+import {requisitarPessoa} from './pessoa.js';
+import { criaCookieDeSessao } from './session.js';
 
 var tela = 0;
 

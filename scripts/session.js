@@ -1,4 +1,4 @@
-import { trocarTela } from '../autentificacao.js';
+import { trocarTela } from './autentificacao.js';
 import {Pessoa} from './pessoa.js';
 
 function criaCookieDeSessao(nome, valor, expDateMs) {
