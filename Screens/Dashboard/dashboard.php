@@ -73,7 +73,7 @@
           
           <div id="exit">
             <a href="../../index.html">
-              <div class="button">
+              <div class="button" id="sair">
                 <p>Sair</p>
               </div>
             </a>
@@ -85,5 +85,5 @@
       include('../../Components/Footer/footer.php');
     ?>
   </body>
-
+  <script type="module" src="script.js"></script>
 </html>

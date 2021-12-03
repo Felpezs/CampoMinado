@@ -1,3 +1,4 @@
+<script src="../../Components/Header/script.js" type="module"></script>
 <header>
     <div id="navbar">
         <div id="logo">
@@ -10,7 +11,7 @@
                 <li><a href="../Perfil/perfil.php">Perfil</a></li>
                 <li><a href="../Historico/historico.php">Histórico</a></li>
                 <li><a href="../Ranking/ranking.php">Ranking</a></li>
-                <li><a href="../../index.html">Sair</a></li>
+                <li><a id="sair">Sair</a></li>
             </ul>
         </nav>
     </div>

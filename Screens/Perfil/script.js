@@ -5,7 +5,7 @@ function cpfIsValid(strCPF) {
     var Soma;
     var Resto;
     Soma = 0;
-  if (strCPF == "00000000000") return false;
+  if (strCPF == "00000000000" || !strCPF) return false;
 
   for (let i=1; i<=9; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (11 - i);
   Resto = (Soma * 10) % 11;
@@ -21,8 +21,6 @@ function cpfIsValid(strCPF) {
     if (Resto != parseInt(strCPF.substring(10, 11) ) ) return false;
     return true;
 }
-
-vvvvvvv
 
 function dataValida(strData){
 

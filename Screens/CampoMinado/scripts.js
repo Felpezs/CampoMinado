@@ -172,8 +172,7 @@ class CampoMinado {
     }
 }
 
-function startGame(
-){
+function startGame(){
   verificaNumeroDeBombasEDimensoes()
 
   document.getElementById("sbt").style.display = "none";
@@ -422,5 +421,7 @@ input2.addEventListener('input', function()
   }
 
 });
+
+
 
 //Código adaptado de: https://dev.to/manussakis/como-criar-um-tabuleiro-de-campo-minado-em-javascript-26gf

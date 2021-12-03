@@ -50,9 +50,8 @@ function cpfValido(strCPF) {
     let cadastroValido = true;
     for(let i = 0; i < formCad.elements.length; i++){
       if(!formCad.elements[i].value){
-        //alert(`O Campo ${formCad.elements[i].alt} É Obrigatório`);
 
-        var input = formCad.elements[i];
+        let input = formCad.elements[i];
 
         let paragraph = document.createElement("P");    
         paragraph.classList = 'warning';              
