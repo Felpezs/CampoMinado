@@ -28,7 +28,7 @@ class UserDAO extends DAO{
                 throw new Exception("O Username solicitado já foi cadastrado no sistema.");
             }
             else
-                die("Inser into Table User failed: {$e->getMessage()}");
+                throw new Exception("Insert into Table User failed: {$e->getMessage()}");
         }
         return $this->retrieveById(DAO::lastId("User", "Id_user"));
     }
@@ -39,7 +39,7 @@ class UserDAO extends DAO{
             $user = new User($rs["Id_user"], $rs["Nome"], $rs["Cpf"], $rs["Data_nascimento"], $rs["Telefone"], $rs["Email"], $rs["Username"], $rs["Password"]);
         }
         catch(PDOException $e){
-            throw "Build Object Failed: {$e->getMessage()}";
+            throw new Exception("Build Object User Failed: {$e->getMessage()}");
         }
         return $user;
     }

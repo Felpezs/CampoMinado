@@ -20,7 +20,11 @@ class PartidaDAO extends DAO{
             $stmt->execute(array($idUser, $gridCol, $gridLin, $bombas, $data, $modalidade, $tempo, $pontuacao, $resultado));
         }
         catch(PDOException $e){
-            die("Insert Into Table Partidas Failed: {$e->getMessage()}");
+            $errorMessage = $e->getMessage();
+            if(strpos(strtolower($errorMessage),"id__user")){
+                throw new Exception("O ID de Usuario especificado não existe");
+            }
+            throw new Exception("Insert Into Table Partidas Failed: {$e->getMessage()}");
         }
         return $this->retrieveById(DAO::lastId("Partidas", "Id_partida"));
     }
@@ -31,7 +35,7 @@ class PartidaDAO extends DAO{
             $partida = new Partida($rs["Id_user"], $rs["Id_partida"], $rs["Grid_Col"], $rs["Grid_Lin"], $rs["Bombas"], $rs["Data"], $rs["Modalidade"], $rs["Tempo"], $rs["Pontuacao"], $rs["Resultado"]);
         }
         catch(PDOException $e){
-            die("Build Object Failed: {$e->getMessage()}");
+            throw new Exception("Build Object Partida Failed: {$e->getMessage()}");
         }
         return $partida;
     }
@@ -45,11 +49,11 @@ class PartidaDAO extends DAO{
             }
         }
         catch(PDOException $e){
-            die("Retrieve From Table Partidas Failed: {$e->getMessage()}");
+            throw new Exception("Retrieve From Table Partidas Failed: {$e->getMessage()}");
         }
         return $partidas;
     }
-
+ 
     public function retrieveByIdUser($idUser){
         $query = "SELECT * FROM Partidas WHERE Id_user = $idUser";
         $partidas = $this->retrieveByQuery($query);
@@ -65,11 +69,11 @@ class PartidaDAO extends DAO{
 
     public function updatePartida($Partida){
         try{
-            $stmt = DAO::getConnection()->prepare("UPDATE Partidas SET Id_user=?, Grid_Col=?, Grid_Lin=?, Bombas=?, Data=?, Modalidade=?, Tempo=?, Pontuacao=?, Resultado=?");
-            $stmt->execute(array($Partida->getIdUser(), $Partida->getGridCol(), $Partida->getGridLin(), $Partida->getBombas(), $Partida->getData(), $Partida->getModalidade(), $Partida->getTempo(), $Partida->getPontuacao(), $Partida->getResultado()));
+            $stmt = DAO::getConnection()->prepare("UPDATE Partidas SET Grid_Col=?, Grid_Lin=?, Bombas=?, Data=?, Modalidade=?, Tempo=?, Pontuacao=?, Resultado=?");
+            $stmt->execute(array($Partida->getGridCol(), $Partida->getGridLin(), $Partida->getBombas(), $Partida->getData(), $Partida->getModalidade(), $Partida->getTempo(), $Partida->getPontuacao(), $Partida->getResultado()));
         }
         catch(PDOException $e){
-            die("Update On Table User Failed: {$e->getMessage()}");
+            throw new Exception("Update On Table Partidas Failed: {$e->getMessage()}");
         }
     }
 }

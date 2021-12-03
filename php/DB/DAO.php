@@ -35,7 +35,7 @@ abstract class DAO{
         $result = $conn->query($sql);
 
         if($result == false)
-            throw new Exception("Create Database Failed");
+            throw new Exception("Create Database Error");
     }
 
     protected function getResultSet($query){
@@ -43,7 +43,7 @@ abstract class DAO{
             $rs = self::getConnection()->query($query);
         }
         catch(PDOException $e){
-            die("Connection Failed: {$e->getMessage()}");
+            die("Get ResultSet Failed: {$e->getMessage()}");
         }
         return $rs;
     }
@@ -55,7 +55,7 @@ abstract class DAO{
             $lastId = $rs->fetch(PDO::FETCH_ASSOC); 
         }
         catch(PDOException $e){
-            die("Connection Failed: {$e->getMessage()}");
+            die("Retrieve Last Id Failed: {$e->getMessage()}");
         }
         return $lastId[$primaryKey];
     }
@@ -98,7 +98,7 @@ abstract class DAO{
             self::executeUpdate($query);
         }
         catch(PDOException $e){
-            die("Connection Failed: {$e->getMessage()}");
+            die("Create Table Failed: {$e->getMessage()}");
         }
     }
 }

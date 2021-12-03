@@ -2,7 +2,6 @@
 
 require_once("../DB/UserDAO.php");
 require_once("../Auth/sessao.php");
-http_response_code(500);
 
 $obj = json_decode(file_get_contents('php://input'));
 
@@ -34,24 +33,3 @@ try {
 } catch (Exception $e) {
     echo "Houve um erro durante a requisição de login: {$e->getMessage()}";
 }    
-    /*
-    $name = (isset($_POST['userName'])) ? $_POST['userName'] : 'nome vazio';
-    $computedString = "Olá, " . $name . "!";
-    $array = ['userName' => $name, 'stringModificada' => $computedString];
-    echo json_encode($array);
-    */
-
-    /*
-    try {
-        $PDO = new PDO("mysql:host=$serverName; dbname=$dbname", $userName, $pwd);
-        $query = "SELECT * FROM User";
-
-        $stmt = $PDO->query($query);
-
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo $row["Username"];
-        }
-
-    } catch (Exception $e) {
-        echo "Connection Failed: {$e->getMessage()}";
-    }  */

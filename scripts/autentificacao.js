@@ -1,6 +1,8 @@
 "use strict";
 import {requisitarPessoa} from './pessoa.js';
 import { criaCookieDeSessao } from './session.js';
+import { Cadastro } from './cadastro.js';
+import { validaCadastro } from './validadores.js';
 
 var tela = 0;
 
@@ -33,32 +35,29 @@ function cadastrar() {
     let senhaInput = document.getElementById('senha').value
     let confirmmarSenhaInput = document.getElementById('confirmarSenha').value
   
-    //Verifica senhas
-    if (senhaInput != confirmmarSenhaInput) {
-      return alert("Senhas não identicas.")
-    }
-    
-    let ajax = new XMLHttpRequest();
-    let json = JSON.stringify({Username: usernameInput, Nome: nomeInput, Cpf: cpfInput, Email: emailInput, DataNasc: dataNascInput, Telefone: telefoneInput, Senha: senhaInput});
+    if(validaCadastro(usernameInput, nomeInput, cpfInput, emailInput, dataNascInput, telefoneInput, senhaInput, confirmmarSenhaInput)){
+      let ajax = new XMLHttpRequest();
+      let json = JSON.stringify({Username: usernameInput, Nome: nomeInput, Cpf: cpfInput, Email: emailInput, DataNasc: dataNascInput, Telefone: telefoneInput, Senha: senhaInput});
 
-    ajax.open("POST", "php/DB/createUser.php");
-    ajax.addEventListener('readystatechange', (ev) => {
+      ajax.open("POST", "php/DB/createUser.php");
+      ajax.addEventListener('readystatechange', (ev) => {
 
-      let ajax = ev.target;
+        let ajax = ev.target;
 
-      if(ajax.readyState === XMLHttpRequest.DONE){
-        if(ajax.status === 200){
-          trocarTela();
+        if(ajax.readyState === XMLHttpRequest.DONE){
+          if(ajax.status === 200){
+            trocarTela();
+          }
+          else{
+            let responseData = JSON.parse(ajax.responseText);
+            alert(responseData.message);
+          }
         }
-        else{
-          let responseData = JSON.parse(ajax.responseText);
-          alert(responseData.message);
-        }
-      }
-    });
-    ajax.setRequestHeader('Content-Type', 'application/json');
-    ajax.send(json);
+      });
+      ajax.setRequestHeader('Content-Type', 'application/json');
+      ajax.send(json);
   }
+}
 
   function logar() {
     let usuario = document.getElementById("usuarioLogin").value;

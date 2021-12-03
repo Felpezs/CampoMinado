@@ -1,5 +1,4 @@
 import { trocarTela } from './autentificacao.js';
-import {Pessoa} from './pessoa.js';
 
 function criaCookieDeSessao(nome, valor, expDateMs) {
     valor = encodeURI(valor);
@@ -17,18 +16,20 @@ function criaCookieDeSessao(nome, valor, expDateMs) {
     }
 }
 
-function armazenaPessoa(pessoa) {
-    let nome = pessoa.getNome();
-    let cpf = pessoa.getCpf();
-    let dataDeNascimento = pessoa.getDataDeNascimento();
-    let email = pessoa.getEmail();
-    let username = pessoa.getUsername();
-    let password = pessoa.getPassword();
-    let telefone = pessoa.getTelefone();
-    let objPessoa = { nome, cpf, dataDeNascimento, telefone, email, username, password };
+/**
+ * Armazena um usuário no localStorage
+ * @param {number} id 
+ * @param {string} nome 
+ * @param {string} dataNascimento 
+ * @param {number} telefone 
+ * @param {string} email 
+ * @param {string} username 
+ */
+function armazenaUser(id, nome, dataNascimento, telefone, email, username) {
+    let user = {id, nome, dataNascimento, telefone, email, username};
     
-    localStorage.setItem('usuario', JSON.stringify(objPessoa));
+    localStorage.setItem('usuario', JSON.stringify(user));
     trocarTela();
 }
 
-export {criaCookieDeSessao, armazenaPessoa};
+export {criaCookieDeSessao, armazenaUser};

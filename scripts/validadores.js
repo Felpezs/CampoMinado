@@ -50,4 +50,45 @@ function cpfValido(strCPF) {
     return dia > 0 && dia <= diasDoMes[mes - 1];
   }
 
-export {cpfValido,dataValida} 
+  function validaCadastro(username, nome, cpf, email, dataNasc, telefone, senha, confirmaSenha){
+    let cadastroValido = true;
+    if(!username){
+      alert('O Campo Username É Obrigatório');
+      cadastroValido = false;
+    }
+    if(!nome){
+      alert('O Campo Nome É Obrigatório');
+      cadastroValido = false;
+    }
+    if(!cpfValido(cpf)){
+      alert('O Campo CPF É Inválido');
+      cadastroValido = false;
+    }
+    if(!email || !email.includes("@")){
+      alert('O Campo Email É Inválido');
+      cadastroValido = false;
+    }
+    if(!dataValida(dataNasc)){
+      alert('O Campo Data de Nascimento É Inválido');
+      cadastroValido = false;
+    }
+    if(!telefone || telefone.length < 10){
+      alert('O Campo Telefone É Inválido');
+      cadastroValido = false;
+    }
+    if(!senha){
+      alert('O Campo Senha É Obrigatório');
+      cadastroValido = false;
+    }
+    if(!confirmaSenha){
+      alert('O Campo Confirmar Senha É Obrigatório');
+      cadastroValido = false;
+    }
+    if(senha !== confirmaSenha){
+      alert('Os Campos De Senha Não São Idênticos');
+      cadastroValido = false;
+    }
+    return cadastroValido; 
+  }
+
+export {validaCadastro, cpfValido,dataValida} 
