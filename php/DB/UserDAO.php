@@ -1,6 +1,6 @@
 <?php
 require_once("DAO.php");
-require_once("../Objects/User.php");
+require_once("User.php");
 
 class UserDAO extends DAO{
     private static $instance;
@@ -58,6 +58,12 @@ class UserDAO extends DAO{
 
     public function retrieveByUsername($username){
         $query = "SELECT * FROM User WHERE Username LIKE '" . $username . "'";
+        $user = $this->retrieveByQuery($query);
+        return (empty($user) ? null : $user[0]);
+    }
+
+    public function retrieveIdByUsername($username){
+        $query = "SELECT Id_user FROM User WHERE Username LIKE '" . $username . "'";
         $user = $this->retrieveByQuery($query);
         return (empty($user) ? null : $user[0]);
     }

@@ -6,8 +6,8 @@ const operacoesNum = [
 [1, -1],  [1, 0],  [1, 1],
 ];
 
-var board = [], tabuleiro, fim = 0, campoMinado, tTrapaca, iniciou=0, numeroDeBombas=20, dimensoes='10x10', tempoAtual=0, timerLigado = true, modo="classico", m = 0, r=0; //fim define o fim do jogo
-let xhttp; 
+var board = [], tabuleiro, fim = 0, campoMinado, tTrapaca, iniciou=0, numeroDeBombas=10, dimensoes='10x10', tempoAtual=0, timerLigado = true, modo="classico", m = 0, r=0; //fim define o fim do jogo
+var xhttp; 
 
   var dimensao1 = parseInt(dimensoes.split("x")[0])
   var dimensao2 = parseInt(dimensoes.split("x")[1])
@@ -446,17 +446,18 @@ function enviarBack(){
 function mostraResposta() {
   try {
     if (xhttp.readyState === XMLHttpRequest.DONE) {
-    if (xhttp.status === 200) {
-    let resposta = JSON.parse(xhttp.responseText);
-    alert("colunas: " + resposta.colunas + " linhas: " + resposta.linhas + " bombas: " + resposta.bombas + " modalidade: " + (resposta.modo == 0 ? 'classico' : 'rivotril') + " tempo: " + resposta.tempo + "  resultado: " + (resposta.resultado == 0 ? "perdeu" : "ganhou") +  " pontuação: " + resposta.pontos);
+      if (xhttp.status === 200) {
+      //alert("colunas: " + resposta.colunas + " linhas: " + resposta.linhas + " bombas: " + resposta.bombas + " modalidade: " + (resposta.modo == 0 ? 'classico' : 'rivotril') + " tempo: " + resposta.tempo + "  resultado: " + (resposta.resultado == 0 ? "perdeu" : "ganhou") +  " pontuação: " + resposta.pontos);
+      }
+      else {
+        let resposta = JSON.parse(xhttp.responseText);
+        alert(`Um problema ocorreu ${resposta.message}`);
+      }
     }
-    else {
-      alert('Um problema ocorreu.');
-    }
-  }
   }
   catch (e) {
-    alert("Ocorreu uma exceção: " + e.description);
+    alert("Ocorreu uma exceção:" + e);
+    console.log(e);
   }
 }
 

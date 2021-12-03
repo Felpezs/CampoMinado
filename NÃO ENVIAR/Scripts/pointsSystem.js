@@ -5,5 +5,5 @@ const calcRate = (data) => {
     if(data.modalidade == "rivotril")
       dataRate += dataRate * 0.55;
   
-    return Math.round(dataRate*1000);
+    return Math.round(dataRate*100);
 }
