@@ -1,6 +1,6 @@
 <?php
 require_once("DAO.php");
-require_once("../Objects/User.php");
+require_once("User.php");
 
 class UserDAO extends DAO{
     private static $instance;
