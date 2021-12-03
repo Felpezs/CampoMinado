@@ -1,5 +1,5 @@
 "use strict";
-import { salvaPessoaNaSessao } from './autentificacao.js';
+import { armazenaPessoa } from './session.js';
 import { cpfValido, dataValida} from './validadores.js';
 
 class Pessoa {
@@ -104,7 +104,7 @@ class Pessoa {
     }
 }
 
-function criarPessoa(ev) {
+function instanciarPessoa(ev) {
     let ajax = ev.target;
   
     if(ajax.readyState === XMLHttpRequest.DONE){
@@ -119,7 +119,7 @@ function criarPessoa(ev) {
           let username = responseData.username;
 
           let pessoa = new Pessoa(nome, cpf, email, dataNasc, telefone, password, username);
-          salvaPessoaNaSessao(pessoa)
+          armazenaPessoa(pessoa)
       }
       else{
         alert(responseData.message);
@@ -132,15 +132,11 @@ function criarPessoa(ev) {
     let json = JSON.stringify({Username: username, Chave: chave});
     let ajax = new XMLHttpRequest();
     ajax.open("POST", "php/Auth/getUser.php");
-    ajax.addEventListener('readystatechange', criarPessoa);
+    ajax.addEventListener('readystatechange', instanciarPessoa);
     ajax.setRequestHeader('Content-Type', 'application/json');
     ajax.send(json);
 
     window.location.href = "./Screens/Dashboard/dashboard.html";
   }
   
-export {
-    Pessoa,
-    criarPessoa,
-    requisitarPessoa
- }
+export {Pessoa, instanciarPessoa, requisitarPessoa};
