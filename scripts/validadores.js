@@ -1,3 +1,5 @@
+
+
 // Validador de CPF adaptado de DevMedia https://www.devmedia.com.br/validar-cpf-com-javascript/23916
 function cpfValido(strCPF) {
     var Soma;
@@ -46,23 +48,50 @@ function cpfValido(strCPF) {
     return dia > 0 && dia <= diasDoMes[mes - 1];
   }
 
-  function validaCadastro(formCad){
-    let cadastroValido = true;
-    for(let i = 0; i < formCad.elements.length; i++){
-      if(!formCad.elements[i].value){
+function inputInvalido(input, message="") {
+ 
 
-        let input = formCad.elements[i];
+    let form = input.parentElement;
+    form.className = 'formControl invalido';
 
-        let paragraph = document.createElement("P");    
-        paragraph.classList = 'warning';              
-        paragraph.append(document.createTextNode("Obrigatório*"));                                           
+    if (message) {
 
-        input.parentNode.insertBefore(paragraph, input);
+    const small = form.querySelector('small');
+    small.style.display = 'block';
+    small.style.color = 'red';
+    small.style.marginBottom = '5px';
+    small.innerText = message;
+
+  }
+  
+}
+
+function inputValido(input) {
+    let form = input.parentElement;
+    form.className = 'formControl valido';
+    const small = form.querySelector('small');
+    small.style.display = 'none';
+}
 
 
-        cadastroValido = false;
-       }
+function verificaCamposVazios (inputs) {
+  let camposValidos = true;
+
+  for(let i=0; i < inputs.length; i++){
+    if(!inputs[i].value){
+      inputInvalido(inputs[i], `${inputs[i].alt} É Obrigatório`);
+      camposValidos = false;
     }
+    else
+      inputValido(inputs[i]);
+  }
+
+  return camposValidos;
+}
+
+function validarCadastro(formCad){
+    let cadastroValido = true;
+    cadastroValido = verificaCamposVazios(formCad.elements);
 
     if(!cpfValido(formCad.cpf.value)){
       alert(`O Campo ${formCad.cpf.alt} É Inválido`);
@@ -76,9 +105,12 @@ function cpfValido(strCPF) {
 
     if(formCad.senha.value !== formCad.confirmaSenha.value){
       alert(`As Senhas Diferem. Insira Senhas Iguais.`);
+      inputInvalido(formCad.senha);
+      inputInvalido(formCad.confirmaSenha);
       cadastroValido = false;
     }
       
     return cadastroValido;
-}
-export {validaCadastro, cpfValido,dataValida} 
+  }
+
+export {validarCadastro, cpfValido, dataValida} 

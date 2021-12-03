@@ -1,7 +1,7 @@
 "use strict";
 import {requisitarPessoa} from './pessoa.js';
 import { criaCookieDeSessao } from './session.js';
-import { validaCadastro } from './validadores.js';
+import { validarCadastro } from './validadores.js';
 
 var tela = 0;
 document.querySelector("a#entrar").addEventListener('click', logar);
@@ -32,8 +32,9 @@ function cadastrar() {
     let telefoneInput = document.getElementById('telefone').value
     let senhaInput = document.getElementById('senha').value
     let confirmmarSenhaInput = document.getElementById('confirmarSenha').value
-  
-    if(validaCadastro(document.formCad)){
+
+    let cadastroValido = validarCadastro(document.formCad)
+    if(cadastroValido){
       let ajax = new XMLHttpRequest();
       let json = JSON.stringify({Username: usernameInput, Nome: nomeInput, Cpf: cpfInput, Email: emailInput, DataNasc: dataNascInput, Telefone: telefoneInput, Senha: senhaInput});
 
