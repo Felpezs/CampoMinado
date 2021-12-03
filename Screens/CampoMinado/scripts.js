@@ -6,7 +6,8 @@ const operacoesNum = [
 [1, -1],  [1, 0],  [1, 1],
 ];
 
-var board = [], tabuleiro, fim = 0, campoMinado, tTrapaca, iniciou=0, numeroDeBombas=20, dimensoes='10x10', tempoAtual=0, timerLigado = true, modo="classico" ; //fim define o fim do jogo
+var board = [], tabuleiro, fim = 0, campoMinado, tTrapaca, iniciou=0, numeroDeBombas=20, dimensoes='10x10', tempoAtual=0, timerLigado = true, modo="classico", m = 0, r=0; //fim define o fim do jogo
+let xhttp; 
 
   var dimensao1 = parseInt(dimensoes.split("x")[0])
   var dimensao2 = parseInt(dimensoes.split("x")[1])
@@ -116,10 +117,9 @@ class CampoMinado {
           var coluna = cell.cellIndex;
           switch (board[linha][coluna]) {
               case '*':
-                  mostrarMinas();
                   cell.innerHTML = "&#128163;";
                   cell.style.backgroundColor = "red";;
-                  fim=1;
+                  gameOver();
                   alert("Você perdeu!");
                   timerLigado = false;
                   break;
@@ -191,8 +191,14 @@ function startGame(
   tabela.oncontextmenu = campoMinado.bandeira;
   trackTime();
   iniciou=1;
+  r=0;
 }
 
+function gameOver(){
+  mostrarMinas();
+  fim=1;
+  enviarBack();
+}
 
 function verificaNumeroDeBombasEDimensoes () {
 
@@ -227,8 +233,8 @@ function mostrarMinas() {
 }
 
 function calculaTempoModoRivotril() {
-  let tempo = -(numeroDeBombas*dimensao1*dimensao2)/3
-  return Math.round(tempo)
+  let tempo = -(numeroDeBombas*dimensao1*dimensao2)/3;
+  return Math.round(tempo);
 }
 
 function restartGame(){
@@ -273,9 +279,8 @@ function limparCelulas(l, c) {
 function fimDeJogo() {
     var cells = document.querySelectorAll(".blocked, .flag");
     if (cells.length === campoMinado.minas && fim == 0) {
-        mostrarMinas();
-        fim=1;
-
+        r=1;
+        gameOver();
         alert("Você venceu!");
 
         timerLigado = false;
@@ -286,8 +291,7 @@ function fimDeJogo() {
 }
 
 function forcarEncerramentoDoJogoTimeout() {
-    mostrarMinas();
-    fim=1;
+    gameOver();
     alert("O tempo acabou, você perdeu!");
     timerLigado = false;
 }
@@ -335,11 +339,13 @@ function trackTime(){
 function alteraModo() {
   switch (modo) {
     case 'classico':
+      m=1;
       modo = 'rivotril'
       document.getElementById("modoRivotril").className = 'switchOn';
       document.getElementById("modoClassico").className = 'switchOff';
       break
     case 'rivotril':
+      m=0;
       modo = 'classico'
       document.getElementById("modoRivotril").className = 'switchOff';
       document.getElementById("modoClassico").className = 'switchOn';
@@ -422,5 +428,36 @@ input2.addEventListener('input', function()
   }
 
 });
+
+function enviarBack(){
+  xhttp = new XMLHttpRequest();
+  if (!xhttp) {
+  alert('Não foi possível criar um objeto XMLHttpRequest.');
+  return false;
+  }
+
+  xhttp.onreadystatechange = mostraResposta;
+  xhttp.open('POST', 'back.php', true);
+  xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhttp.send('dados=' + encodeURIComponent(JSON.stringify({colunas : dimensao1, linhas : dimensao2,bombas : numeroDeBombas, modo : m,tempo : tempoAtual, resultado : r})));
+
+}
+
+function mostraResposta() {
+  try {
+    if (xhttp.readyState === XMLHttpRequest.DONE) {
+    if (xhttp.status === 200) {
+    let resposta = JSON.parse(xhttp.responseText);
+    alert("colunas: " + resposta.colunas + " linhas: " + resposta.linhas + " bombas: " + resposta.bombas + " modalidade: " + (resposta.modo == 0 ? 'classico' : 'rivotril') + " tempo: " + resposta.tempo + "  resultado: " + (resposta.resultado == 0 ? "perdeu" : "ganhou") +  " pontuação: " + resposta.pontos);
+    }
+    else {
+      alert('Um problema ocorreu.');
+    }
+  }
+  }
+  catch (e) {
+    alert("Ocorreu uma exceção: " + e.description);
+  }
+}
 
 //Código adaptado de: https://dev.to/manussakis/como-criar-um-tabuleiro-de-campo-minado-em-javascript-26gf
