@@ -1,10 +1,13 @@
+<?php 
+   include('../../php/Auth/sessao.php');
+   sessaoValida();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
   <head>
     <meta charset="UTF-8">
     <title>Campo Minado - Dashboard</title>
-
     <!--Favicon-->
     <link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
     
@@ -25,6 +28,7 @@
   </head>
 
   <body>
+    
     <header>
       <h1>A experiência definitiva de Campo Minado!</h1>
     </header>
@@ -35,14 +39,14 @@
         </div>
         <div id="card_area">
           <div class="group_cards">
-            <a href="../CampoMinado/campoMinado.html">
+            <a href="../CampoMinado/campoMinado.php">
               <div class="card">
                 <h2>Jogar!</h2>
                 <img src="../../img/bomb.png" alt="Bomba">
                 <p>Jogue o melhor Campo Minado!</p>
               </div>
             </a>
-            <a href="../Perfil/perfil.html">
+            <a href="../Perfil/perfil.php">
               <div class="card">
                 <h2>Perfil</h2>
                 <img src="../../img/bomberman.png" alt="Bomberman">
@@ -51,14 +55,14 @@
             </a>
         </div>
         <div class="group_cards">
-          <a href="../Ranking/ranking.html">
+          <a href="../Ranking/ranking.php">
             <div class="card">
               <h2>Ranking</h2>
               <img src="../../img/rank_img.png" alt="Ranking">
               <p>Visualize os melhores jogadores de Campo Minado.</p>
             </div>
           </a>
-          <a href="../Historico/historico.html">
+          <a href="../Historico/historico.php">
             <div class="card">
               <h2>Histórico</h2>
               <img src="../../img/clock_historic.png" alt="Relógio">
@@ -77,42 +81,9 @@
         </div>
       </article>
     </div>
-    <footer class="footer-container">
-      <div id="f-sobre">
-        <h2>SOBRE</h2>
-        <p>Campo Minado é um projeto desenvolvido pelos alunos da Faculdade de Tecnologia da Unicamp como parte do
-          processo avaliativo da matéria "Programação para Web"</p>
-      </div>
-      <div id="f-links">
-
-        <h2>LINKS ÚTEIS</h2>
-
-        <a href="../Dashboard/dashboard.html" title="Home">Home</a>
-
-        <a href="../CampoMinado/campoMinado.html" title="Campo Minado">Jogar</a>
-
-        <a href="../Perfil/perfil.html" title="Perfil">Perfil</a>
-
-        <a href="../Historico/historico.html" title="Histórico">Histórico</a>
-
-        <a href="../Ranking/ranking.html" title="Ranking">Ranking</a>
-
-      </div>
-      <div id="f-social">
-
-        <div id="f-social-icons-div">
-            <a href="https://www.ft.unicamp.br" target="_blank">
-              <img src="../../img/ft_icon.png" alt="Icone Ft">
-            </a>
-            <a href="https://github.com/Felpezs/CampoMinado" target="_blank">
-              <img src="../../img/github_icon.png" alt="Icone Github">
-            </a>
-          <a href="https://www.unicamp.br/unicamp/" target="_blank">
-            <img src="../../img/unicamp_icon.png" alt="Icone Unicamp">
-          </a>
-        </div>
-      </div>
-    </footer>
+    <?php 
+      include('../../Components/Footer/footer.php');
+    ?>
   </body>
 
 </html>

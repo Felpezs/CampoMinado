@@ -1,6 +1,6 @@
 "use strict";
-import { armazenaUser } from './session.js';
-import { cpfValido, dataValida} from './validadores.js';
+import { dataValida} from './validadores.js';
+import {trocarTela} from './autentificacao.js';
 
 class Pessoa {
     constructor (id, nome, email, dataNasc, telefone, username){
@@ -79,37 +79,38 @@ class Pessoa {
     }
 }
 
-function instanciarPessoa(ev) {
-    let ajax = ev.target;
-  
-    if(ajax.readyState === XMLHttpRequest.DONE){
-      if(ajax.status === 201){
-          var responseData = JSON.parse(ajax.responseText);
-          let id = responseData.id;
-          let nome = responseData.nome;
-          let email = responseData.email;
-          let dataNasc = responseData.dataNasc;
-          let telefone = responseData.telefone;
-          let username = responseData.username;
-
-          armazenaUser(id, nome, dataNasc, telefone, email, username);
-      }
-      else{
-        alert(responseData.message);
-      }
-    }
-  }
-
   function requisitarPessoa(chave, username){
     
     let json = JSON.stringify({Username: username, Chave: chave});
     let ajax = new XMLHttpRequest();
     ajax.open("POST", "php/Auth/getUser.php");
-    ajax.addEventListener('readystatechange', instanciarPessoa);
+
+    ajax.addEventListener('readystatechange', (ev) => {
+      let ajax = ev.target;
+  
+      if(ajax.readyState === XMLHttpRequest.DONE){
+        if(ajax.status === 201){
+            let responseData = JSON.parse(ajax.responseText);
+            let id = responseData.id;
+            let nome = responseData.nome;
+            let email = responseData.email;
+            let dataNasc = responseData.dataNasc;
+            let telefone = responseData.telefone;
+            let username = responseData.username;
+
+            let user = {id, nome, dataNasc, telefone, email, username};
+    
+            localStorage.setItem('usuario', JSON.stringify(user));
+            window.location.href = "./Screens/Dashboard/dashboard.php";
+        }
+        else{
+          alert(responseData.message);
+        }
+      }
+    });
+
     ajax.setRequestHeader('Content-Type', 'application/json');
     ajax.send(json);
-
-    window.location.href = "./Screens/Dashboard/dashboard.html";
   }
   
-export {Pessoa, instanciarPessoa, requisitarPessoa};
+export {Pessoa, requisitarPessoa};

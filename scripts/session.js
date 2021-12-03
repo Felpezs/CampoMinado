@@ -1,5 +1,3 @@
-import { trocarTela } from './autentificacao.js';
-
 function criaCookieDeSessao(nome, valor, expDateMs) {
     valor = encodeURI(valor);
   
@@ -16,20 +14,61 @@ function criaCookieDeSessao(nome, valor, expDateMs) {
     }
 }
 
-/**
- * Armazena um usuário no localStorage
- * @param {number} id 
- * @param {string} nome 
- * @param {string} dataNascimento 
- * @param {number} telefone 
- * @param {string} email 
- * @param {string} username 
- */
-function armazenaUser(id, nome, dataNascimento, telefone, email, username) {
-    let user = {id, nome, dataNascimento, telefone, email, username};
+
+function recuperaCookie(nome_cookie) {
+    // Adiciona o sinal de = na frente do nome do cookie
+    var cname = ' ' + nome_cookie + '=';
     
-    localStorage.setItem('usuario', JSON.stringify(user));
-    trocarTela();
+    // Obtém todos os cookies do documento
+    var cookies = document.cookie;
+    
+    // Verifica se seu cookie existe
+    if (cookies.indexOf(cname) == -1) {
+        return false;
+    }
+    
+    // Remove a parte que não interessa dos cookies
+    cookies = cookies.substr(cookies.indexOf(cname), cookies.length);
+
+    // Obtém o valor do cookie até o ;
+    if (cookies.indexOf(';') != -1) {
+        cookies = cookies.substr(0, cookies.indexOf(';'));
+    }
+    
+    // Remove o nome do cookie e o sinal de =
+    cookies = cookies.split('=')[1];
+    
+    // Retorna apenas o valor do cookie
+    return decodeURI(cookies);
 }
 
-export {criaCookieDeSessao, armazenaUser};
+
+function verificaSessaoNaoSeguro(href) {
+
+    let chave = recuperaCookie("chave");
+    let usuario = recuperaCookie("usuario");
+    //ProgWeb/Screens/
+    let ajax = new XMLHttpRequest();
+    let json = JSON.stringify({Username: usuario, Chave: chave});
+
+    ajax.open("POST", "../../php/Auth/verificaSessao.php");
+    ajax.addEventListener('readystatechange', (ev) => {
+      let ajax = ev.target;
+
+      if(ajax.readyState === XMLHttpRequest.DONE){
+        if(ajax.status === 200){
+          console.log("Sessão verificada com sucesso!")
+        }
+        else if(ajax.status === 402) {
+          window.location.href = "../index.html";
+          console.log("Sessão inválida, faça login novamente!")
+        }
+      }
+    });
+    ajax.setRequestHeader('Content-Type', 'application/json');
+    ajax.send(json);
+
+
+}
+
+export {criaCookieDeSessao, verificaSessaoNaoSeguro};

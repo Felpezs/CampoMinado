@@ -1,3 +1,8 @@
+<?php 
+   include('../../php/Auth/sessao.php');
+   sessaoValida();
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
    <head>
@@ -23,23 +28,9 @@
       
    </head>
    <body>
-      <header>
-         <div id="navbar">
-           <div id="logo">
-               <a href="../Dashboard/dashboard.html"><img src="../../img/Logo.png" alt="Logo da Página"></a>
-           </div>
-           <nav>
-               <ul>
-                   <li><a href="../Dashboard/dashboard.html">Home</a></li>
-                   <li><a href="../CampoMinado/campoMinado.html">Jogar</a></li>
-                   <li><a href="../Perfil/perfil.html">Perfil</a></li>
-                   <li><a href="../Historico/historico.html">Histórico</a></li>
-                   <li><a href="../Ranking/ranking.html">Ranking</a></li>
-                   <li><a href="../../index.html">Sair</a></li>
-               </ul>
-           </nav>
-         </div>
-       </header>
+      <?php
+         include('../../Components/Header/nav.php');
+      ?>
       <article class="container">
          <div class="jogoContainer">
             <div class="headerJogoContainer">
@@ -103,43 +94,10 @@
               </div>
              </div>
       </article>
-      <footer class="footer-container" id="footer">
-         <div id="f-sobre">
-           <h2>SOBRE</h2>
-           <p>Campo Minado é um projeto desenvolvido pelos alunos da Faculdade de Tecnologia da Unicamp como parte do
-             processo avaliativo da matéria "Programação para Web"</p>
-         </div>
-         <div id="f-links">
- 
-           <h2>LINKS ÚTEIS</h2>
- 
-           <a href="../Dashboard/dashboard.html" title="Home">Home</a>
- 
-           <a href="../CampoMinado/campoMinado.html" title="Campo Minado">Jogar</a>
- 
-           <a href="../Perfil/perfil.html" title="Perfil">Perfil</a>
- 
-           <a href="../Historico/historico.html" title="Histórico">Histórico</a>
- 
-           <a href="../Ranking/ranking.html" title="Ranking">Ranking</a>
- 
-         </div>
-         <div id="f-social">
- 
-           <div id="f-social-icons-div">
-               <a href="https://www.ft.unicamp.br" target="_blank">
-                 <img src="../../img/ft_icon.png" alt="Icone Ft">
-               </a>
-               <a href="https://github.com/Felpezs/CampoMinado" target="_blank">
-                 <img src="../../img/github_icon.png" alt="Icone Github">
-               </a>
-             <a href="https://www.unicamp.br/unicamp/" target="_blank">
-               <img src="../../img/unicamp_icon.png" alt="Icone Unicamp">
-             </a>
-           </div>
-         </div>
-       </footer>
 
+      <?php 
+         include('../../Components/Footer/footer.php');
+      ?>
        <script src="scripts.js"></script>
    </body>
 </html>

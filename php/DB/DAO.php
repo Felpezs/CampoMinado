@@ -76,6 +76,7 @@ abstract class DAO{
                 Email VARCHAR(70) NOT NULL,
                 Username VARCHAR(120) NOT NULL,
                 Password VARCHAR(120) NOT NULL,
+                UNIQUE (Email),
                 UNIQUE (Cpf),
                 UNIQUE (Username),
                 PRIMARY KEY(Id_user)

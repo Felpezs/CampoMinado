@@ -172,3 +172,8 @@ input[type="checkbox"]:checked + label::after {
 a{
   cursor: pointer;
 }
+
+p.warning{
+    color: #CC892A;
+    align-self: flex-start;
+}

@@ -35,7 +35,7 @@ function verificaSessao ($username, $chave) {
 
     session_id($username);
     session_start();
-    if ($_SESSION['chave'] == $chave)
+    if ($_SESSION['chave'] === $chave)
         $chaveValida = true;
     else
         $chaveValida = false;
@@ -46,14 +46,19 @@ function verificaSessao ($username, $chave) {
 }
 
 function destruirSessao ($username, $chave) {
-
     if (verificaSessao($username, $chave)) {
         session_id($username);
         session_start();
         $result = session_destroy();
         return $result;
     }
-
 }
 
+function sessaoValida(){
+    if(!isset($_COOKIE['usuario']) || !isset($_COOKIE['chave']) || !verificaSessao($_COOKIE['usuario'], $_COOKIE['chave'])){
+        http_response_code(401);
+        header('Location: /ProgWeb/index.html');
+        exit() ;
+    }
+}
 ?>

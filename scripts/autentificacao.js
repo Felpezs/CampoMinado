@@ -1,11 +1,9 @@
 "use strict";
 import {requisitarPessoa} from './pessoa.js';
 import { criaCookieDeSessao } from './session.js';
-import { Cadastro } from './cadastro.js';
 import { validaCadastro } from './validadores.js';
 
 var tela = 0;
-
 document.querySelector("a#entrar").addEventListener('click', logar);
 document.querySelector("a#cadastro").addEventListener('click', cadastrar);
 let elementoSwitch = document.querySelectorAll("a#trocaTela");
@@ -35,7 +33,7 @@ function cadastrar() {
     let senhaInput = document.getElementById('senha').value
     let confirmmarSenhaInput = document.getElementById('confirmarSenha').value
   
-    if(validaCadastro(usernameInput, nomeInput, cpfInput, emailInput, dataNascInput, telefoneInput, senhaInput, confirmmarSenhaInput)){
+    if(validaCadastro(document.formCad)){
       let ajax = new XMLHttpRequest();
       let json = JSON.stringify({Username: usernameInput, Nome: nomeInput, Cpf: cpfInput, Email: emailInput, DataNasc: dataNascInput, Telefone: telefoneInput, Senha: senhaInput});
 
@@ -80,7 +78,7 @@ function cadastrar() {
           if (ajax.status === 201){
             criaCookieDeSessao("usuario", responseData.usuario, responseData.expDateMs);
             criaCookieDeSessao("chave", responseData.chave, responseData.expDateMs);
-            requisitarPessoa(responseData.chave, responseData.usuario);
+            requisitarPessoa(responseData.chave, responseData.usuario)
           }
           else
             alert(responseData.message);

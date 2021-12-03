@@ -4,7 +4,6 @@ function cpfValido(strCPF) {
     var Resto;
     Soma = 0;
   
-    if (!strCPF) return false;
     if (strCPF == "00000000000") return false;
   
     for (let i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
@@ -23,9 +22,6 @@ function cpfValido(strCPF) {
   }
   
   function dataValida(strData) {
-  
-    if(!strData)
-      return false; 
       
     //Verifica se a data esta no padrão
     if (!(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(strData)))
@@ -50,45 +46,40 @@ function cpfValido(strCPF) {
     return dia > 0 && dia <= diasDoMes[mes - 1];
   }
 
-  function validaCadastro(username, nome, cpf, email, dataNasc, telefone, senha, confirmaSenha){
+  function validaCadastro(formCad){
     let cadastroValido = true;
-    if(!username){
-      alert('O Campo Username É Obrigatório');
-      cadastroValido = false;
-    }
-    if(!nome){
-      alert('O Campo Nome É Obrigatório');
-      cadastroValido = false;
-    }
-    if(!cpfValido(cpf)){
-      alert('O Campo CPF É Inválido');
-      cadastroValido = false;
-    }
-    if(!email || !email.includes("@")){
-      alert('O Campo Email É Inválido');
-      cadastroValido = false;
-    }
-    if(!dataValida(dataNasc)){
-      alert('O Campo Data de Nascimento É Inválido');
-      cadastroValido = false;
-    }
-    if(!telefone || telefone.length < 10){
-      alert('O Campo Telefone É Inválido');
-      cadastroValido = false;
-    }
-    if(!senha){
-      alert('O Campo Senha É Obrigatório');
-      cadastroValido = false;
-    }
-    if(!confirmaSenha){
-      alert('O Campo Confirmar Senha É Obrigatório');
-      cadastroValido = false;
-    }
-    if(senha !== confirmaSenha){
-      alert('Os Campos De Senha Não São Idênticos');
-      cadastroValido = false;
-    }
-    return cadastroValido; 
-  }
+    for(let i = 0; i < formCad.elements.length; i++){
+      if(!formCad.elements[i].value){
+        //alert(`O Campo ${formCad.elements[i].alt} É Obrigatório`);
 
+        var input = formCad.elements[i];
+
+        let paragraph = document.createElement("P");    
+        paragraph.classList = 'warning';              
+        paragraph.append(document.createTextNode("Obrigatório*"));                                           
+
+        input.parentNode.insertBefore(paragraph, input);
+
+
+        cadastroValido = false;
+       }
+    }
+
+    if(!cpfValido(formCad.cpf.value)){
+      alert(`O Campo ${formCad.cpf.alt} É Inválido`);
+      cadastroValido = false;
+    }
+
+    if(!dataValida(formCad.dataNasc.value)){
+      alert(`O Campo ${formCad.dataNasc.alt} É Inválido`);
+      cadastroValido = false;
+    }
+
+    if(formCad.senha.value !== formCad.confirmaSenha.value){
+      alert(`As Senhas Diferem. Insira Senhas Iguais.`);
+      cadastroValido = false;
+    }
+      
+    return cadastroValido;
+}
 export {validaCadastro, cpfValido,dataValida} 
