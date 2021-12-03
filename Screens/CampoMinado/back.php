@@ -28,9 +28,9 @@
         require_once("../../php/DB/PartidaDAO.php");
         require_once("../../php/DB/UserDAO.php");
 
-        //$id = UserDAO::getInstance()->retrieveIdByUsername($username);
+        $user = UserDAO::getInstance()->retrieveByUsername($_COOKIE["usuario"]);
 
-        $partida = PartidaDAO::getInstance()->insertNewPartida(1, $dados->colunas, $dados->linhas, $dados->bombas, date('d/m/y'), $dados->modo, ($dados->tempo < 0 ? ($dados->tempo * -1): $dados->tempo), ($dados->resultado == 0 ? 0 : pontuacao($dados)), $dados->resultado);
+        $partida = PartidaDAO::getInstance()->insertNewPartida($user->getId(), $dados->colunas, $dados->linhas, $dados->bombas, date('d/m/y'), $dados->modo, ($dados->tempo < 0 ? ($dados->tempo * -1): $dados->tempo), ($dados->resultado == 0 ? 0 : pontuacao($dados)), $dados->resultado);
         if(!empty($partida)){
             
             http_response_code(200);

@@ -62,12 +62,6 @@ class UserDAO extends DAO{
         return (empty($user) ? null : $user[0]);
     }
 
-    public function retrieveIdByUsername($username){
-        $query = "SELECT Id_user FROM User WHERE Username LIKE '" . $username . "'";
-        $user = $this->retrieveByQuery($query);
-        return (empty($user) ? null : $user[0]);
-    }
-
     public function updateUser($User){
         try{
             $stmt = DAO::getConnection()->prepare("UPDATE User SET Nome=?, Cpf=?, Data_nascimento=?, Telefone=?, Email=?, Username=?, Password=?");
