@@ -60,7 +60,6 @@ class PartidaDAO extends DAO{
         return (empty($partidas) ? null : $partidas);
     }
 
-
     public function retrieveById($idPartida){
         $query = "SELECT * FROM Partidas WHERE Id_partida = $idPartida";
         $partida = $this->retrieveByQuery($query);
@@ -75,6 +74,12 @@ class PartidaDAO extends DAO{
         catch(PDOException $e){
             throw new Exception("Update On Table Partidas Failed: {$e->getMessage()}");
         }
+    }
+
+    public function retrieveTopDez(){
+        $query = "SELECT * FROM Partidas ORDER BY Pontuacao DESC LIMIT 10";
+        $partida = $this->retrieveByQuery($query);
+        return (empty($partida) ? null : $partida);
     }
 }
 ?>

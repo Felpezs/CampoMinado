@@ -57,7 +57,7 @@ function destruirSessao ($username, $chave) {
 function sessaoValida(){
     if(!isset($_COOKIE['usuario']) || !isset($_COOKIE['chave']) || !verificaSessao($_COOKIE['usuario'], $_COOKIE['chave'])){
         http_response_code(401);
-        header('Location: /ProgWeb/index.html');
+        header('Location: ../../index.html');
         exit() ;
     }
 }

@@ -60,6 +60,7 @@
             <th style="width: 20%">Tempo</th>
             <th style="width: 15%;">Pontuação</th>
           </tr>
+
         </table>
         
       </div>

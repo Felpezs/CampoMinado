@@ -76,7 +76,7 @@ class UserDAO extends DAO{
             $stmt->execute(array($User->getNome(), $User->getDtNasc(), $User->getTelefone(), $User->getEmail(), $User->getPassword()));
         }
         catch(PDOException $e){
-            throw "Update On Table User Failed: {$e->getMessage()}";
+            throw new Exception("Update On Table User Failed: {$e->getMessage()}");
         }
     }
 }
