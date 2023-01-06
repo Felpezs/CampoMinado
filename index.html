@@ -24,8 +24,7 @@
 
             <p class="sub">Insira as suas informações para entrar.</p>
             <p><br><br></p>
-
-            <form>
+            <form>  
                 <input id="usuarioLogin" type="text" class="text" placeholder="Usuário"/>
                 <p><br></p>
                 <input id="senhaLogin" type="password" class="text" placeholder="Senha"/>
@@ -36,14 +35,13 @@
 
                 <p><br><br></p>
 
-            <a class="button" onclick="realizarLogin()" ><p>Entrar no Jogo</p></a>
+            <a class="button" id="logar"><p>Entrar no Jogo</p></a>
                 
                 <p><br><br><br><br></p>
 
-                <p>Ainda não possui conta? <a onclick="trocarTela()">Crie uma agora.</a></p>
+                <p>Ainda não possui conta? <a class="trocaTela">Crie uma agora.</a></p>
 
             </form>
-
         </div>
 
         <div class="login" id="cadastrar">
@@ -52,33 +50,58 @@
             <p class="sub">Torne-se um dos maiores jogadores de Campo Minado da Unicamp</p>
             <p><br><br></p>
 
-            <form>
-                <input type="text" class="text"  placeholder="Nome Completo" id="nome"/>
+            <form name="formCad" id="formCadastro">
+
+                <div class="form-control">
+                <small>Error message</small>
+                <input type="text" class="text" placeholder="Nome Completo" id="nome" name="Nome" data-nomeInput="Nome"/>
+                </div>
                 <p><br></p>
-                <input type="text" class="text" placeholder="CPF (Apenas Dígitos)" id="cpf"/>
+                <div class="form-control">
+                <small>Error message</small>
+                <input type="text" class="text" placeholder="CPF (Apenas Dígitos)" id="cpf" name="CPF" data-nomeInput="CPF"/>
+                </div>
                 <p><br></p>
-                <input type="text" class="text"  placeholder="Data de Nascimento (dd/mm/yyyy)" id="dataNasc" />
+                <div class="form-control">
+                <small>Error message</small>
+                <input type="text" class="text"  placeholder="Data de Nascimento (dd/mm/yyyy)" id="dataNasc" name="dataNasc" data-nomeInput="Data de Nascimento"/>
+                </div>
                 <p><br></p>
-                <input type="text" class="text"  placeholder="Telefone" id="telefone"/>
+                <div class="form-control">
+                <small>Error message</small>
+                <input type="text" class="text"  placeholder="Telefone" id="telefone" name="Telefone" data-nomeInput="Telefone"/>
+                </div>
                 <p><br></p>
-                <input type="text" class="text"  placeholder="Email" id="email"/>
+                <div class="form-control">
+                <small>Error message</small>
+                <input type="text" class="text" placeholder="Email" id="email" name="Email" data-nomeInput="Email"/>
+                </div>
                 <p><br></p>
-                <input type="text" class="text"  placeholder="Usuário" id="usuario"/>
+                <div class="form-control">
+                <small>Error message</small>
+                <input type="text" class="text" placeholder="Usuário" id="usuario" name="Username" data-nomeInput="Username"/>
+                </div>
                 <p><br></p>
-                <input type="password" class="text"  placeholder="Senha" id="senha"/>
+                <div class="form-control">
+                <small>Error message</small>
+                <input type="password" class="text" placeholder="Senha" id="senha" name="Senha" data-nomeInput="Senha"/>
+                </div>
                 <p><br></p>
-                <input type="password" class="text" placeholder="Confirme sua Senha" id="confirmarSenha"/>
+                <div class="form-control">
+                <small>Error message</small>
+                <input type="password" class="text" placeholder="Confirme sua Senha" id="confirmarSenha" name="confirmarSenha" data-nomeInput="Confirmar Senha"/>
+                </div>
                 <p><br></p>
 
-                <a class="button" onclick="criarConta();"><p>Criar minha conta</p></a>
+                <a class="button" id="cadastro"><p>Criar minha conta</p></a>
 
                 <p><br></p>
 
-                <p>Já possui uma conta? <a onclick="trocarTela()">Faça login agora.</a></p>
+                <p>Já possui uma conta? <a class="trocaTela">Faça login agora.</a></p>
 
             </form>
         </div>
     </div>
-    <script src="scripts.js"></script> 
+    <script type="module" src="./scripts/autentificacao.js"></script> 
   </body>
 </html>

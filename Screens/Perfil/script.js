@@ -1,209 +1,90 @@
 "use strict";
+import {Pessoa} from '../../scripts/pessoa.js';
+import {recuperaCookie} from '../../scripts/session.js';
 
-// Validador de CPF adaptado de DevMedia https://www.devmedia.com.br/validar-cpf-com-javascript/23916
-function cpfIsValid(strCPF) {
-    var Soma;
-    var Resto;
-    Soma = 0;
-  if (strCPF == "00000000000") return false;
-
-  for (let i=1; i<=9; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (11 - i);
-  Resto = (Soma * 10) % 11;
-
-    if ((Resto == 10) || (Resto == 11))  Resto = 0;
-    if (Resto != parseInt(strCPF.substring(9, 10)) ) return false;
-
-  Soma = 0;
-    for (let i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (12 - i);
-    Resto = (Soma * 10) % 11;
-
-    if ((Resto == 10) || (Resto == 11))  Resto = 0;
-    if (Resto != parseInt(strCPF.substring(10, 11) ) ) return false;
-    return true;
-}
-
-vvvvvvv
-
-function dataValida(strData){
-
-    //Verifica se a data esta no padrão
-    if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(strData)){
-        
-    }
-    else{
-        return false;
-    }
-
-    var divisao =  strData.split("/");
-    var dia = parseInt(divisao[0], 10); 
-    var mes = parseInt(divisao[1], 10);
-    var ano = parseInt(divisao[2], 10);
-
-    if(ano < 1900 || ano > new Date ().getFullYear() || mes == 0 || mes > 12){
-        return false;
-    }
-
-    var diasDoMes = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
-
-    //Ano bixesto
-    if(ano % 400 == 0 || (ano % 100 != 0 && ano % 4 == 0)){
-        diasDoMes[1] = 29;
-    }
-
-    return dia > 0 && dia <= diasDoMes[mes - 1];
-}
-
-
-class Pessoa {
-    constructor() {
-      this.nome = '';
-      this.cpf = '';
-      this.email = '';
-      this.dataDeNascimento = '';
-      this.telefone = '';
-      this.password = '';
-      this.username = '';
-     }
-
-    getNome () {
-      return this.nome;
-    }
-    getCpf(){
-        return this.cpf;
-    }
-    getEmail(){
-        return this.email;
-    }
-    getDataDeNascimento(){
-        return this.dataDeNascimento;
-    }
-    getTelefone(){
-        return this.telefone;
-    }
-    getPassword(){
-        return this.password;
-    }
-    getUsername(){
-        return this.username;
-    }
-    setNome(nomeUsuario){
-        if(nomeUsuario == ""){
-            alert("Nome inválido")
-        }
-        else{
-        this.nome = nomeUsuario;  
-        return this.nome
-        }
-    }
-    setCpf(cpfUsuario){
-        if(cpfIsValid(cpfUsuario)){
-        this.cpf = cpfUsuario;
-        }
-        else{
-            alert("cpfInvalido");
-        }
-
-    }
-    setEmail(emailUsuario){
-        if(emailUsuario.includes("@")){
-        this.email = emailUsuario;
-        }
-        else{
-            alert("Email Invalido")
-        }
-    }
-    setDataDeNascimento(dataDeNascimentoUsuario){
-        if(dataValida(dataDeNascimentoUsuario))
-        {
-        this.dataDeNascimento = dataDeNascimentoUsuario;
-        }
-        else{
-            alert("Data Invalida")
-        }
-    }
-    setTelefone(telefoneUsuario){
-        if(telefoneUsuario == "" || telefoneUsuario.length < 10){
-            alert("Telefone inválido")
-        }
-        else{
-        this.telefone = telefoneUsuario;  
-        return this.telefone
-        }
-    }
-
-    setPassword(passwordUsuario){
-        this.password = passwordUsuario;
-    }
-    setUsername(usernameUsuario){
-        this.username = usernameUsuario;
-    }
+function correcao(form){
+  
+var allElements = form.elements;
+  for (var i = 0, l = allElements.length; i < l; ++i) {
+        allElements[i].disabled=false;
+  }
+  return true;
 }
 
 
 
 function resgatarPessoaDaSessao() {
+  let localUserData = localStorage.getItem('usuario');
+  let localUserDataJSON = JSON.parse(localUserData);
 
-  let localUserData = localStorage.getItem('usuario')
+    let pessoa = new Pessoa(parseInt(localUserDataJSON.id), localUserDataJSON.nome, localUserDataJSON.email, localUserDataJSON.dataNasc, parseInt(localUserDataJSON.telefone), localUserDataJSON.username);
+    return pessoa
+}
 
-  if (!localUserData) return alert("Nenhum usuário encontrado na sessão!")
+const setImageOnScreen = (imgInBase64) => {
 
-  let localUserDataJSON = JSON.parse(localUserData)
+  let img = document.querySelector(".posicionamento .fotoPerfil");
+  img.src = imgInBase64;
+  img.height = 230;
+  img.width = 230; 
 
-  let pessoa = new Pessoa()
+}
 
 
-  let nome1 = pessoa.setNome(localUserDataJSON.nome)
-  let cpf1 = pessoa.setCpf(localUserDataJSON.cpf)
-  let email1 = pessoa.setEmail(localUserDataJSON.email)
-  let dataDeNascimento1 = pessoa.setDataDeNascimento(localUserDataJSON.dataDeNascimento)
-  let telefone1 = pessoa.setTelefone(localUserDataJSON.telefone)
-  let password1 = pessoa.setPassword(localUserDataJSON.password)
-  let username1 = pessoa.setUsername(localUserDataJSON.username)
 
-  return pessoa
+const getImageFromDB = () => {
+
+  
+  let ajax = new XMLHttpRequest();
+  let cookieUsuario = recuperaCookie('usuario');
+  let cookieChave = recuperaCookie('chave');
+  ajax.open("POST", "../../php/DB/getImage.php");
+
+  let json = JSON.stringify({ Username: cookieUsuario, Chave: cookieChave });
+
+  ajax.addEventListener('readystatechange', (ev) => {
+      let ajax = ev.target;
+      if (ajax.readyState === XMLHttpRequest.DONE) {
+
+        var responseData = ajax.responseText;
+
+        if (ajax.status === 200){
+          if(ajax.responseText.length > 40)
+            setImageOnScreen(ajax.responseText);
+        }
+        //alert(responseData.message);
+      }
+    });
+
+    ajax.setRequestHeader('Content-Type', 'application/json');
+    ajax.send(json);
 
 }
 
 function Preencher(){
-
   let pessoa = resgatarPessoaDaSessao()
   document.getElementById("nome").value = pessoa.getNome() 
   document.getElementById("dtNas").value = pessoa.getDataDeNascimento() 
   document.getElementById("telefone").value = pessoa.getTelefone() 
   document.getElementById("email").value = pessoa.getEmail() 
+  getImageFromDB()
 }
 
 function salvaPessoaNaSessao (pessoa) {
-
   let pessoaOld = resgatarPessoaDaSessao()
-
+  let id = pessoa.getId() || pessoaOld.getId();
   let nome = pessoa.getNome() || pessoaOld.getNome();
-  let cpf = pessoa.getCpf() || pessoaOld.getCpf();
-  let dataDeNascimento = pessoa.getDataDeNascimento() || pessoaOld.getDataDeNascimento();
+  let dataNasc = pessoa.getDataDeNascimento() || pessoaOld.getDataDeNascimento();
   let email = pessoa.getEmail() || pessoaOld.getEmail();
   let username = pessoa.getUsername() || pessoaOld.getUsername();
-  let password = pessoa.getPassword() || pessoaOld.getPassword();
   let telefone = pessoa.getTelefone() || pessoaOld.getTelefone;
-  let objPessoa = { nome, cpf, dataDeNascimento, telefone, email, username, password};
 
-  let existemElementosInvalidos = false;
+  let objPessoa = {id, nome, dataNasc, telefone, email, username};
 
-  Object.keys(objPessoa).map((key) => {
-    if (objPessoa[key] == '') {
-      existemElementosInvalidos = true;
-    }
-  });
-
-  if (existemElementosInvalidos) {
-    // console.log("O usuário não foi criado pois existem elementos invalidos durante a criação")
-  } else {
-    localStorage.setItem('usuario', JSON.stringify(objPessoa));
-    // console.log("O usuário foi registrado com sucesso")
-  }
+  localStorage.setItem('usuario', JSON.stringify(objPessoa));
 }
 
 function atualizarDadosNaSessao(){
-
   let pessoa = resgatarPessoaDaSessao()
 
   let nome1 = document.getElementById("nome").value
@@ -211,9 +92,8 @@ function atualizarDadosNaSessao(){
   let telefone1 = document.getElementById("telefone").value
   let email1 = document.getElementById("email").value
   let senhaInput = document.getElementById('senha').value
-  let confirmmarSenhaInput = document.getElementById('confirmarSenha').value
-
-  if(senhaInput != confirmmarSenhaInput ){
+  let confirmarSenhaInput = document.getElementById('confirmarSenha').value
+  if(senhaInput !== confirmarSenhaInput ){
     return alert ("Senhas não identicas.")
   }
   let password1 = document.getElementById("senha").value
@@ -222,11 +102,32 @@ function atualizarDadosNaSessao(){
   pessoa.setDataDeNascimento(dataDeNascimento1)
   pessoa.setTelefone(telefone1)
   pessoa.setEmail(email1)
-  pessoa.setPassword(password1)
-  
-  salvaPessoaNaSessao(pessoa)
 
-  alert("Dados atualizados com sucesso!")
+ 
+  
+
+  let ajax = new XMLHttpRequest();
+  let cookieUsuario = recuperaCookie('usuario');
+  let cookieChave = recuperaCookie('chave')
+  let json = JSON.stringify({Nome: pessoa.getNome(), DtNasc: pessoa.getDataDeNascimento(), Telefone: pessoa.getTelefone(), Email: pessoa.getEmail(), Password: password1, Username: cookieUsuario, Chave: cookieChave });
+
+  ajax.open("POST", "../../php/DB/updateUser.php");
+  ajax.addEventListener('readystatechange', (ev) => {
+      let ajax = ev.target;
+      if (ajax.readyState === XMLHttpRequest.DONE) {
+        var responseData = JSON.parse(ajax.responseText);
+    
+        if (ajax.status === 200){
+          salvaPessoaNaSessao(pessoa);
+        }
+        alert(responseData.message);
+      }
+    });
+
+    ajax.setRequestHeader('Content-Type', 'application/json');
+    ajax.send(json);  
+
+  //alert("Dados atualizados com sucesso!")
 }
 
 //Quando clicar 
@@ -252,21 +153,69 @@ document.getElementById("lapisSenha").addEventListener("click", function(){
   document.getElementById("confirmarSenha").disabled = false;
 });
 
+document.getElementById("enviar").addEventListener("click", function(event){
+   atualizarDadosNaSessao();
+});
 
-Preencher()
+
+Preencher();
 
 
-//window.atualizarDadosNaSessao = atualizarDadosNaSessao
+
+
+
 
 //Inserindo novas imagens em cache adaptado de <https://stackoverflow.com/questions/49349628/is-there-a-way-to-change-src-of-few-images-at-once-in-js>
 const updateImage = (event) =>{
   if(event.target.files && event.target.files[0]){
     let img = document.querySelector(".posicionamento .fotoPerfil");
-    img.src = URL.createObjectURL(event.target.files[0]);
-    img.height = 230;
-    img.width = 230; 
+
+
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = function () {
+
+
+        let ajax = new XMLHttpRequest();
+        let cookieUsuario = recuperaCookie('usuario');
+        let cookieChave = recuperaCookie('chave');
+        let ImageInBase64 = reader.result; 
+        let json = JSON.stringify({ ImageInBase64: ImageInBase64 , Username: cookieUsuario, Chave: cookieChave });
+      
+        ajax.open("POST", "../../php/DB/updateImage.php");
+        ajax.addEventListener('readystatechange', (ev) => {
+            let ajax = ev.target;
+            if (ajax.readyState === XMLHttpRequest.DONE) {
+              console.log(ajax.responseText)
+              //var responseData = JSON.parse(ajax.responseText);
+              if (ajax.status === 200){
+                  //alert(responseData.ImageInBase64)
+                  img.src = ImageInBase64;
+                  img.height = 230;
+                  img.width = 230;
+              }
+              //alert(responseData.message);
+            }
+          });
+      
+          ajax.setRequestHeader('Content-Type', 'application/json');
+          ajax.send(json);
+      
+
+      };
+      reader.onerror = function (error) {
+        console.log('Error: ', error);
+      };
+   
+
+ 
+
   }
 }
+
+
+
+
 
 let insertImage = document.getElementById("image");
 insertImage.addEventListener("change", updateImage);

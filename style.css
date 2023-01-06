@@ -122,6 +122,10 @@ form a{
     justify-content: center;
 }
 
+#cadastro{
+    margin: 5px 0 5px 0;
+}
+
 input[type="text"],input[type="password"]  {
     color: white;
     padding-left: 20px;
@@ -171,4 +175,16 @@ input[type="checkbox"]:checked + label::after {
 
 a{
   cursor: pointer;
+}
+
+.formControl.valido input {
+    border: 2px solid #2ecc71;
+}
+
+.formControl.invalido input{
+    border: 2px solid #e74c3c;
+}
+
+.form-control small{
+    display: none;
 }

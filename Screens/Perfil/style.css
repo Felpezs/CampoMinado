@@ -221,7 +221,7 @@ input::placeholder{
     right: 5px 
 }
 
-button[type="submit"]{
+button#enviar{
     font-family: 'Londrina Solid', 'cursive';
     font-size: 1em;
     color: #fff;
